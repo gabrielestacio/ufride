@@ -128,7 +128,7 @@ CREATE TABLE rides (
     npm install
     ```
 
-    ## Executando o Projeto
+## Executando o Projeto
 
 Para rodar a aplicação, você precisará de dois terminais abertos.
 
