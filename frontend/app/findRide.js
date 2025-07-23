@@ -5,7 +5,6 @@ import apiClient from '../api/axiosConfig';
 
 const PRIMARY_COLOR = '#0922C1';
 
-// O Card de Carona agora é um componente separado para melhor organização
 const RideCard = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => router.push({ pathname: '/rideDetails', params: { rideId: item.id } })}>
         <View>
@@ -17,7 +16,6 @@ const RideCard = ({ item }) => (
             <Text style={styles.cardText} numberOfLines={1}>{item.destination}</Text>
         </View>
         <View style={styles.cardFooter}>
-            {/* --- A CORREÇÃO ESTÁ AQUI --- */}
             <Text style={styles.cardPrice}>R$ {parseFloat(item.price).toFixed(2)}</Text>
             
             <Text style={styles.cardInfo}>{new Date(item.ride_date).toLocaleDateString('pt-BR')}</Text>

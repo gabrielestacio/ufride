@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const db = require('./db'); // Importa nossa configuração do banco
+const db = require('./db');
 
 const app = express();
 const PORT = 3001;
@@ -9,16 +9,10 @@ const PORT = 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
-// --- API Endpoints com Banco de Dados ---
-
-// POST /api/register
 app.post('/api/register', async (req, res) => {
     const { name, email, password } = req.body;
     console.log(`Tentativa de cadastro para: ${email}`);
 
-    // NOTA DE SEGURANÇA: Em um app real, a senha NUNCA deve ser salva em texto puro.
-    // Use uma biblioteca como 'bcrypt' para fazer o hash da senha antes de salvar.
-    
     try {
         const result = await db.query(
             'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id',
@@ -28,14 +22,13 @@ app.post('/api/register', async (req, res) => {
         res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
     } catch (error) {
         console.error('Erro ao cadastrar usuário:', error);
-        if (error.code === '23505') { // Código de erro para violação de constraint 'unique'
+        if (error.code === '23505') {
             return res.status(409).json({ message: 'Este email já está cadastrado.' });
         }
         res.status(500).json({ message: 'Erro interno do servidor.' });
     }
 });
 
-// POST /api/login
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
     console.log(`Tentativa de login para: ${email}`);
@@ -48,7 +41,6 @@ app.post('/api/login', async (req, res) => {
             return res.status(401).json({ message: 'Email ou senha inválidos.' });
         }
 
-        // Em um app real, compararíamos a senha com hash: const match = await bcrypt.compare(password, user.password);
         if (password === user.password) {
             console.log(`Login bem-sucedido para o usuário ID: ${user.id}`);
             res.status(200).json({ message: 'Login bem-sucedido!', token: 'fake-jwt-token-12345', userId: user.id });
@@ -61,7 +53,6 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// POST /api/rides
 app.post('/api/rides', async (req, res) => {
     const { origin, destination, rideDate, price, seats, userId } = req.body;
 
@@ -78,7 +69,6 @@ app.post('/api/rides', async (req, res) => {
     }
 });
 
-// GET /api/rides
 app.get('/api/rides', async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM rides ORDER BY ride_date DESC');

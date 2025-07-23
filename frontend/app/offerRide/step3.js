@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaVie
 import { router, useLocalSearchParams } from 'expo-router';
 import apiClient from '../../api/axiosConfig';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import dayjs from 'dayjs'; // Importa a biblioteca de data
+import dayjs from 'dayjs';
 
 const PRIMARY_COLOR = '#0922C1';
 const BACKGROUND_COLOR = '#FFFFFF';
@@ -80,7 +80,6 @@ export default function OfferRideStep3Screen() {
     );
 }
 
-// Os estilos permanecem os mesmos
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: BACKGROUND_COLOR },
     container: { flex: 1, padding: 20 },

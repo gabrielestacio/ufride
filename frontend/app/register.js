@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView } from 'react-native';
 import { router } from 'expo-router';
-import apiClient from '../api/axiosConfig'; // Importa nosso cliente de API
+import apiClient from '../api/axiosConfig';
 
 const PRIMARY_COLOR = '#0922C1';
 const SECONDARY_COLOR = '#A0A0A0';
@@ -25,10 +25,9 @@ export default function RegisterScreen() {
         }
 
         try {
-            // Chamada para a API de cadastro
             const response = await apiClient.post('/register', { name, email, password });
             Alert.alert('Sucesso!', response.data.message);
-            router.replace('/'); // Volta para a tela de login após o sucesso
+            router.replace('/');
         } catch (error) {
             console.error(error);
             const message = error.response?.data?.message || 'Não foi possível realizar o cadastro.';

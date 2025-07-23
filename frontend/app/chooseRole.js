@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, SafeAreaView, TouchableOpacity } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router'; // Importa o useLocalSearchParams
+import { router, useLocalSearchParams } from 'expo-router';
 
 export default function ChooseRoleScreen() {
-    const { userId } = useLocalSearchParams(); // Pega o userId que veio da tela de Login
+    const { userId } = useLocalSearchParams();
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -18,7 +18,6 @@ export default function ChooseRoleScreen() {
                     <TouchableOpacity style={styles.roleButton} onPress={() => router.push('/findRide')}>
                         <Text style={styles.roleText}>Passageiro</Text>
                     </TouchableOpacity>
-                    {/* AQUI ESTÁ A MUDANÇA: passamos o userId para a próxima tela */}
                     <TouchableOpacity style={styles.roleButton} onPress={() => router.push({ pathname: '/offerRide/step1', params: { userId } })}>
                         <Text style={styles.roleText}>Motorista</Text>
                     </TouchableOpacity>

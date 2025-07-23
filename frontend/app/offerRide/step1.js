@@ -8,11 +8,10 @@ export default function OfferRideStep1Screen() {
     const { userId } = useLocalSearchParams();
     const [input, setInput] = useState('');
     const [predictions, setPredictions] = useState([]);
-    const timeoutRef = useRef(null); // Ref para controlar o debounce
+    const timeoutRef = useRef(null);
 
-    // Função para buscar os lugares
     const fetchPlaces = async (text) => {
-        if (text.length < 3) { // Só busca se tiver pelo menos 3 caracteres
+        if (text.length < 3) {
             setPredictions([]);
             return;
         }
@@ -31,14 +30,13 @@ export default function OfferRideStep1Screen() {
         }
     };
 
-    // Efeito para buscar com "debounce" (evita muitas chamadas à API)
     useEffect(() => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
             fetchPlaces(input);
-        }, 500); // Espera 500ms após o usuário parar de digitar
+        }, 500);
     }, [input]);
 
     const handleSelectLocation = (place) => {

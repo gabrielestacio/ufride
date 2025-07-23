@@ -28,7 +28,6 @@ export default function OfferRideStep2Screen() {
 
     const handleSelectLocation = (place) => {
         const destination = place.description;
-        // Passa o bastão para a última tela com todos os dados
         router.push({ pathname: '/offerRide/step3', params: { origin, destination, userId } });
     };
 
