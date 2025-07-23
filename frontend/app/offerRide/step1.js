@@ -1,0 +1,82 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, TextInput, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+
+const Maps_API_KEY = 'AIzaSyA97GIi8Yt__GfhGo9n_hN94hTxCKh3T9k';
+
+export default function OfferRideStep1Screen() {
+    const { userId } = useLocalSearchParams();
+    const [input, setInput] = useState('');
+    const [predictions, setPredictions] = useState([]);
+    const timeoutRef = useRef(null); // Ref para controlar o debounce
+
+    // Função para buscar os lugares
+    const fetchPlaces = async (text) => {
+        if (text.length < 3) { // Só busca se tiver pelo menos 3 caracteres
+            setPredictions([]);
+            return;
+        }
+        const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=${Maps_API_KEY}&language=pt-BR&components=country:br`;
+        try {
+            const response = await fetch(url);
+            const json = await response.json();
+            if (json.status === 'OK') {
+                setPredictions(json.predictions);
+            } else {
+                setPredictions([]);
+                console.log("Google API Error:", json.status, json.error_message);
+            }
+        } catch (e) {
+            console.error("Fetch error:", e);
+        }
+    };
+
+    // Efeito para buscar com "debounce" (evita muitas chamadas à API)
+    useEffect(() => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
+            fetchPlaces(input);
+        }, 500); // Espera 500ms após o usuário parar de digitar
+    }, [input]);
+
+    const handleSelectLocation = (place) => {
+        const origin = place.description;
+        router.push({ pathname: '/offerRide/step2', params: { origin, userId } });
+    };
+
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.container}>
+                <Text style={styles.header}>Qual é o ponto de partida?</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Digite o endereço de origem"
+                    value={input}
+                    onChangeText={setInput}
+                />
+                <FlatList
+                    data={predictions}
+                    keyExtractor={(item) => item.place_id}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity style={styles.predictionItem} onPress={() => handleSelectLocation(item)}>
+                            <Text style={styles.predictionText}>{item.description}</Text>
+                        </TouchableOpacity>
+                    )}
+                    style={styles.listView}
+                />
+            </View>
+        </SafeAreaView>
+    );
+}
+
+const styles = StyleSheet.create({
+    safeArea: { flex: 1, backgroundColor: '#FFFFFF' },
+    container: { flex: 1, padding: 20, paddingTop: 10 },
+    header: { fontSize: 22, fontWeight: 'bold', fontFamily: 'Poppins-Bold', marginBottom: 20, textAlign: 'center' },
+    input: { height: 55, fontFamily: 'Poppins-Regular', borderColor: '#E8E8E8', borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: 16, backgroundColor: '#F6F6F6' },
+    listView: { marginTop: 10 },
+    predictionItem: { paddingVertical: 15, borderBottomWidth: 1, borderBottomColor: '#f0f0f0' },
+    predictionText: { fontSize: 16, fontFamily: 'Poppins-Regular' },
+});
