@@ -35,8 +35,7 @@ Siga estes passos na ordem para configurar o projeto.
 ### 1. Clone o Repositório
 
 ```bash
-git clone [URL_DO_SEU_REPOSITORIO_AQUI]
-cd UFRide_App
+git clone https://github.com/gabrielestacio/ufride.git
 
 ### 2. Configuração do Banco de Dados (PostgreSQL)
 
