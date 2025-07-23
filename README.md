@@ -36,6 +36,7 @@ Siga estes passos na ordem para configurar o projeto.
 
 ```bash
 git clone https://github.com/gabrielestacio/ufride.git
+```
 
 ### 2. Configuração do Banco de Dados (PostgreSQL)
 
@@ -64,6 +65,7 @@ CREATE TABLE rides (
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+```
 
 ### 3. Configuração do Backend
 
